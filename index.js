@@ -2,13 +2,35 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
 const StudentModel = require('./models/Students')
-const { hashPassword } = require('./utils/passwordUtils')
+const { hashPassword, comparePassword } = require('./utils/passwordUtils')
 
 const app = express();
 app.use(express.json());
 app.use(cors())
 
 mongoose.connect("mongodb://127.0.0.1:27017/Students")
+
+app.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await StudentModel.findOne({ email });
+        
+        if (!user) {
+            return res.status(401).json({ message: "No record found" });
+        }
+        
+        const isMatch = await comparePassword(password, user.password);
+        
+        if (isMatch) {
+            res.json("Success");
+        } else {
+            res.status(401).json({ message: "Incorrect password" });
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({ message: 'Error during login' });
+    }
+})
 
 app.post('/register', async (req, res) => {
     try {
