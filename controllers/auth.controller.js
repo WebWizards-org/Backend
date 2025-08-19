@@ -1,4 +1,5 @@
 const StudentModel = require('../models/Students')
+const { hashPassword, comparePassword } = require('../utils/passwordUtils')
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -23,7 +24,7 @@ const login = async (req, res) => {
 
 const register = async (req, res) => {
     try {
-        const { name, email, number, password } = req.body;
+        const { name, email, password } = req.body;
         const existingUser = await StudentModel.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: 'User already exists' });
@@ -32,8 +33,8 @@ const register = async (req, res) => {
         const newStudent = await StudentModel.create({
             name,
             email,
-            number,
-            password: hashedPassword
+            password: hashedPassword,
+            role: 'student'
         });
 
         res.status(201).json({ 
@@ -42,7 +43,7 @@ const register = async (req, res) => {
                 id: newStudent._id,
                 name: newStudent.name,
                 email: newStudent.email,
-                number: newStudent.number
+                role: newStudent.role
             }
         });
     } catch (error) {
