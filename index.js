@@ -13,8 +13,10 @@ dotenv.config()
 const app = express();
 app.use(express.json());
 app.use(cors({
-    origin: process.env.CLIENT_URL,
-    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"]
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization']
 }))
 
 // mongoose.connect("mongodb://127.0.0.1:27017/Students")

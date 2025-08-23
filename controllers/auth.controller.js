@@ -1,5 +1,6 @@
 const StudentModel = require('../models/Students')
 const { hashPassword, comparePassword } = require('../utils/passwordUtils')
+const { generateToken } = require('../utils/jwtUtils')
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -12,7 +13,17 @@ const login = async (req, res) => {
         const isMatch = await comparePassword(password, user.password);
         
         if (isMatch) {
-            res.json("Success");
+            const token = generateToken(user._id);
+            res.json({
+                message: "Success",
+                token,
+                user: {
+                    id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    role: user.role
+                }
+            });
         } else {
             res.status(401).json({ message: "Incorrect password" });
         }
@@ -37,8 +48,10 @@ const register = async (req, res) => {
             role: 'student'
         });
 
+        const token = generateToken(newStudent._id);
         res.status(201).json({ 
             message: 'Registration successful',
+            token,
             student: {
                 id: newStudent._id,
                 name: newStudent.name,
