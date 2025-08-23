@@ -21,7 +21,9 @@ app.use(cors({
 
 // mongoose.connect("mongodb://127.0.0.1:27017/Students")
 
-app.use('/api/auth',authRoutes)
+app.use('/api/auth', authRoutes);
+const protectedRoutes = require('./routes/protected.routes');
+app.use('/api/protected', protectedRoutes);
 
 connectDb().then(()=>{
 app.listen(3001, ()=>{

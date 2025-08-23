@@ -35,16 +35,35 @@ const login = async (req, res) => {
 
 const register = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        console.log('Registration request body:', req.body);
+        const { name, email, password, number } = req.body;
+        
+        // Validate all required fields
+        const errors = {};
+        if (!name) errors.name = 'Name is required';
+        if (!email) errors.email = 'Email is required';
+        if (!password) errors.password = 'Password is required';
+        if (!number) errors.number = 'Phone number is required';
+
+        if (Object.keys(errors).length > 0) {
+            console.log('Validation errors:', errors);
+            return res.status(400).json({ 
+                message: 'All fields are required',
+                errors
+            });
+        }
+
         const existingUser = await StudentModel.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: 'User already exists' });
         }
+
         const hashedPassword = await hashPassword(password);
         const newStudent = await StudentModel.create({
             name,
             email,
             password: hashedPassword,
+            number,
             role: 'student'
         });
 
@@ -52,7 +71,7 @@ const register = async (req, res) => {
         res.status(201).json({ 
             message: 'Registration successful',
             token,
-            student: {
+            user: {
                 id: newStudent._id,
                 name: newStudent.name,
                 email: newStudent.email,
