@@ -37,8 +37,7 @@ const register = async (req, res) => {
     try {
         console.log('Registration request body:', req.body);
         const { name, email, password, number } = req.body;
-        
-        // Validate all required fields
+
         const errors = {};
         if (!name) errors.name = 'Name is required';
         if (!email) errors.email = 'Email is required';

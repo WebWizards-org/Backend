@@ -2,7 +2,6 @@ const { hasRole } = require('../utils/roles');
 
 const checkRole = (requiredRole) => {
     return (req, res, next) => {
-        // User should be attached by auth middleware
         if (!req.user) {
             return res.status(401).json({ message: 'Authentication required' });
         }

@@ -11,23 +11,20 @@ const createAdmin = async () => {
         const adminData = {
             name: 'Admin User',
             email: 'admin@learnify.com',
-            password: 'admin123',  // This will be hashed
+            password: 'admin123',
             number: '1234567890',
             role: 'admin'
         };
 
-        // Check if admin already exists
         const existingAdmin = await StudentModel.findOne({ email: adminData.email });
         if (existingAdmin) {
             console.log('Admin user already exists!');
             process.exit(0);
         }
 
-        // Hash the password
         const hashedPassword = await hashPassword(adminData.password);
         adminData.password = hashedPassword;
 
-        // Create admin user
         const admin = await StudentModel.create(adminData);
         console.log('Admin user created successfully!');
         console.log('Email:', adminData.email);

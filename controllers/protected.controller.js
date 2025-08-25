@@ -1,7 +1,6 @@
 const StudentModel = require('../models/Students');
 const { ROLES } = require('../utils/roles');
 
-// Admin Controllers
 const getAllUsers = async (req, res) => {
     try {
         const users = await StudentModel.find({}).select('-password');
@@ -35,25 +34,19 @@ const updateUserRole = async (req, res) => {
     }
 };
 
-// Instructor Controllers
 const createCourse = async (req, res) => {
-    // To be implemented when we create the Course model
     res.json({ message: 'Course creation endpoint' });
 };
 
 const getMyCourses = async (req, res) => {
-    // To be implemented when we create the Course model
     res.json({ message: 'Get instructor courses endpoint' });
 };
 
-// Student Controllers
 const enrollInCourse = async (req, res) => {
-    // To be implemented when we create the Course model
     res.json({ message: 'Course enrollment endpoint' });
 };
 
 const getEnrolledCourses = async (req, res) => {
-    // To be implemented when we create the Course model
     res.json({ message: 'Get enrolled courses endpoint' });
 };
 
