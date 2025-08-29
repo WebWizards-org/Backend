@@ -4,6 +4,7 @@ const cors = require('cors')
 const StudentModel = require('./models/Students')
 const { hashPassword, comparePassword } = require('./utils/passwordUtils')
 const authRoutes = require('./routes/auth.routes') 
+const message  = require('./routes/contactUs.routes')
 const dotenv = require("dotenv");
 const connectDb = require('./utils/db')
 dotenv.config()
@@ -24,6 +25,7 @@ app.use(cors({
 app.use('/api/auth', authRoutes);
 const protectedRoutes = require('./routes/protected.routes');
 app.use('/api/protected', protectedRoutes);
+app.use('/api/messages', message);
 
 connectDb().then(()=>{
 app.listen(3001, ()=>{
