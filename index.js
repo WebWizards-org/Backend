@@ -1,3 +1,5 @@
+const cookieParser = require('cookie-parser');
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -10,6 +12,7 @@ const connectDb = require("./utils/db");
 dotenv.config();
 
 const app = express();
+app.use(cookieParser());
 app.use(express.json());
 app.use(
   cors({

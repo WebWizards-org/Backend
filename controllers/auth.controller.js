@@ -14,9 +14,13 @@ const login = async (req, res) => {
         
         if (isMatch) {
             const token = generateToken(user._id);
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                maxAge: 24 * 60 * 60 * 1000 // 1 day
+            });
             res.json({
                 message: "Success",
-                token,
                 user: {
                     id: user._id,
                     name: user.name,
@@ -36,13 +40,14 @@ const login = async (req, res) => {
 const register = async (req, res) => {
     try {
         console.log('Registration request body:', req.body);
-        const { name, email, password, number } = req.body;
+        const { name, email, password, number, role } = req.body;
 
         const errors = {};
         if (!name) errors.name = 'Name is required';
         if (!email) errors.email = 'Email is required';
         if (!password) errors.password = 'Password is required';
         if (!number) errors.number = 'Phone number is required';
+        if (!role || !['student', 'instructor'].includes(role)) errors.role = 'Role must be student or instructor';
 
         if (Object.keys(errors).length > 0) {
             console.log('Validation errors:', errors);
@@ -63,7 +68,7 @@ const register = async (req, res) => {
             email,
             password: hashedPassword,
             number,
-            role: 'student'
+            role
         });
 
         const token = generateToken(newStudent._id);

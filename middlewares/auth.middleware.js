@@ -3,12 +3,18 @@ const StudentModel = require('../models/Students');
 
 const authMiddleware = async (req, res, next) => {
     try {
-        const authHeader = req.headers.authorization;
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        
+        let token = req.cookies.token;
+       
+        if (!token) {
+            const authHeader = req.headers.authorization;
+            if (authHeader && authHeader.startsWith('Bearer ')) {
+                token = authHeader.split(' ')[1];
+            }
+        }
+        if (!token) {
             return res.status(401).json({ message: 'Authorization token required' });
         }
-
-        const token = authHeader.split(' ')[1];
 
         const decoded = verifyToken(token);
         if (!decoded) {
