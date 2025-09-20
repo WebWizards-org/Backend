@@ -10,6 +10,23 @@ const getAllUsers = async (req, res) => {
     }
 };
 
+const studentList = async (req, res) => {
+    try {
+        const students = await StudentModel.find( {role: "student"} );
+        res.status(200).json(students);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching student list' });
+    }
+};
+
+const instructorList = async (req, res) => {
+    try {
+        const instructors = await StudentModel.find( {role: "instructor"} );
+        res.status(200).json(instructors);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching instructor list' });
+    }
+};
 const updateUserRole = async (req, res) => {
     try {
         const { userId, newRole } = req.body;
@@ -56,5 +73,7 @@ module.exports = {
     createCourse,
     getMyCourses,
     enrollInCourse,
-    getEnrolledCourses
+    getEnrolledCourses,
+    studentList,
+    instructorList
 };

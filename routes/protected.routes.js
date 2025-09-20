@@ -9,10 +9,14 @@ const {
     createCourse,
     getMyCourses,
     enrollInCourse,
-    getEnrolledCourses
+    getEnrolledCourses,
+    studentList,
+    instructorList
 } = require('../controllers/protected.controller');
 
 router.get('/users', authMiddleware, checkRole(ROLES.ADMIN), getAllUsers);
+router.get('/students', studentList);
+router.get('/instructors',  instructorList);
 router.put('/users/role', authMiddleware, checkRole(ROLES.ADMIN), updateUserRole);
 
 router.post('/courses', authMiddleware, checkRole(ROLES.INSTRUCTOR), createCourse);
