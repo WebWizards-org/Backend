@@ -11,7 +11,8 @@ const {
     enrollInCourse,
     getEnrolledCourses,
     studentList,
-    instructorList
+    instructorList,
+    getUserById
 } = require('../controllers/protected.controller');
 
 router.get('/users', authMiddleware, checkRole(ROLES.ADMIN), getAllUsers);
@@ -24,5 +25,6 @@ router.get('/instructor/courses', authMiddleware, checkRole(ROLES.INSTRUCTOR), g
 
 router.post('/courses/:courseId/enroll', authMiddleware, checkRole(ROLES.STUDENT), enrollInCourse);
 router.get('/student/courses', authMiddleware, checkRole(ROLES.STUDENT), getEnrolledCourses);
+router.get('/user/:id', getUserById);
 
 module.exports = router;
