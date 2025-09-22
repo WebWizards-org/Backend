@@ -8,13 +8,22 @@ const {
   deleteCourse,
   updateCourse,
   getCourseById,
+  getCoursesByInstructor,
+  getCoursesByInstructorId,
 } = require("../controllers/course.controller");
 const authMiddleware = require("../middlewares/auth.middleware");
 
-router.post("/courses", upload.single("image"), createCourse);
+router.post("/courses", authMiddleware, upload.single("image"), createCourse);
 router.get("/allCourses", getCourses);
-router.delete("/courses/:id", deleteCourse);
-router.put("/courses/:id", upload.single("image"), updateCourse);
+router.get("/my-courses", authMiddleware, getCoursesByInstructor);
+router.get("/courses/instructor/:instructorId", getCoursesByInstructorId);
+router.delete("/courses/:id", authMiddleware, deleteCourse);
+router.put(
+  "/courses/:id",
+  authMiddleware,
+  upload.single("image"),
+  updateCourse
+);
 router.get("/courses/:id", getCourseById);
 
 module.exports = router;

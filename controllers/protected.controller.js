@@ -86,6 +86,35 @@ const getUserById = async (req, res) => {
   }
 };
 
+const addPurchasedCourses = async (req, res) => {
+  try {
+    const studentId = req.params.id;
+    const { courseIds } = req.body;
+
+    const student = await StudentModel.findById(studentId);
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    // Avoid duplicates
+    const newCourses = courseIds.filter(
+      (id) => !student.purchasedCourses.includes(id)
+    );
+    student.purchasedCourses.push(...newCourses);
+
+    await student.save();
+
+    res
+      .status(200)
+      .json({
+        message: "Courses added",
+        purchasedCourses: student.purchasedCourses,
+      });
+  } catch (error) {
+    res.status(500).json({ message: "Error adding courses", error });
+  }
+};
+
 module.exports = {
   getAllUsers,
   updateUserRole,
@@ -96,4 +125,5 @@ module.exports = {
   studentList,
   instructorList,
   getUserById,
+  addPurchasedCourses,
 };

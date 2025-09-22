@@ -1,30 +1,59 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { checkRole } = require('../middlewares/role.middleware');
-const authMiddleware = require('../middlewares/auth.middleware');
-const { ROLES } = require('../utils/roles');
+const { checkRole } = require("../middlewares/role.middleware");
+const authMiddleware = require("../middlewares/auth.middleware");
+const { ROLES } = require("../utils/roles");
 const {
-    getAllUsers,
-    updateUserRole,
-    createCourse,
-    getMyCourses,
-    enrollInCourse,
-    getEnrolledCourses,
-    studentList,
-    instructorList,
-    getUserById
-} = require('../controllers/protected.controller');
+  getAllUsers,
+  updateUserRole,
+  createCourse,
+  getMyCourses,
+  enrollInCourse,
+  getEnrolledCourses,
+  studentList,
+  instructorList,
+  getUserById,
+  addPurchasedCourses,
+} = require("../controllers/protected.controller");
 
-router.get('/users', authMiddleware, checkRole(ROLES.ADMIN), getAllUsers);
-router.get('/students', studentList);
-router.get('/instructors',  instructorList);
-router.put('/users/role', authMiddleware, checkRole(ROLES.ADMIN), updateUserRole);
+router.get("/users", authMiddleware, checkRole(ROLES.ADMIN), getAllUsers);
+router.get("/students", studentList);
+router.get("/instructors", instructorList);
+router.put(
+  "/users/role",
+  authMiddleware,
+  checkRole(ROLES.ADMIN),
+  updateUserRole
+);
 
-router.post('/courses', authMiddleware, checkRole(ROLES.INSTRUCTOR), createCourse);
-router.get('/instructor/courses', authMiddleware, checkRole(ROLES.INSTRUCTOR), getMyCourses);
+router.post(
+  "/courses",
+  authMiddleware,
+  checkRole(ROLES.INSTRUCTOR),
+  createCourse
+);
+router.get(
+  "/instructor/courses",
+  authMiddleware,
+  checkRole(ROLES.INSTRUCTOR),
+  getMyCourses
+);
 
-router.post('/courses/:courseId/enroll', authMiddleware, checkRole(ROLES.STUDENT), enrollInCourse);
-router.get('/student/courses', authMiddleware, checkRole(ROLES.STUDENT), getEnrolledCourses);
-router.get('/user/:id', getUserById);
+router.post(
+  "/courses/:courseId/enroll",
+  authMiddleware,
+  checkRole(ROLES.STUDENT),
+  enrollInCourse
+);
+router.get(
+  "/student/courses",
+  authMiddleware,
+  checkRole(ROLES.STUDENT),
+  getEnrolledCourses
+);
+router.get("/user/:id", getUserById);
+
+// Add purchased courses to student account
+router.post("/user/:id/purchase", authMiddleware, addPurchasedCourses);
 
 module.exports = router;
