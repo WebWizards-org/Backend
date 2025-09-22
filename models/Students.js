@@ -17,6 +17,12 @@ const StudentSchema = new mongoose.Schema(
         ref: "Course",
       },
     ],
+    cart: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Course",
+      },
+    ],
   },
   { timestamps: true }
 );

@@ -14,11 +14,17 @@ const {
   instructorList,
   getUserById,
   addPurchasedCourses,
+  deleteUser,
+  testAuth,
+  getCart,
+  addToCart,
+  removeFromCart,
 } = require("../controllers/protected.controller");
 
 router.get("/users", authMiddleware, checkRole(ROLES.ADMIN), getAllUsers);
 router.get("/students", studentList);
 router.get("/instructors", instructorList);
+router.delete("/users/:id", authMiddleware, checkRole(ROLES.ADMIN), deleteUser);
 router.put(
   "/users/role",
   authMiddleware,
@@ -55,5 +61,16 @@ router.get("/user/:id", getUserById);
 
 // Add purchased courses to student account
 router.post("/user/:id/purchase", authMiddleware, addPurchasedCourses);
+
+// Cart management routes
+router.get("/test-auth", authMiddleware, testAuth);
+router.get("/cart", authMiddleware, checkRole(ROLES.STUDENT), getCart);
+router.post("/cart", authMiddleware, checkRole(ROLES.STUDENT), addToCart);
+router.delete(
+  "/cart/:courseId",
+  authMiddleware,
+  checkRole(ROLES.STUDENT),
+  removeFromCart
+);
 
 module.exports = router;

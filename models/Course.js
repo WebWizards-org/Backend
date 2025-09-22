@@ -15,5 +15,5 @@ const courseSchema = new mongoose.Schema({
   studentsEnrolled: { type: Number, default: 0 },
 });
 
-const CourseModel = mongoose.model("Courses", courseSchema);
+const CourseModel = mongoose.model("Course", courseSchema);
 module.exports = CourseModel;
