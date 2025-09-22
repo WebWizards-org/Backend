@@ -10,7 +10,10 @@ const dotenv = require("dotenv");
 const connectDb = require("./utils/db");
 const protectedRoutes = require("./routes/protected.routes");
 const courseRoutes = require("./routes/course.route");
+const errorHandler = require('./utils/errorHandler');
 dotenv.config();
+
+
 
 const app = express();
 app.use(cookieParser());
@@ -23,14 +26,15 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-app.use("/images", express.static("public/images"));
-
-// mongoose.connect("mongodb://127.0.0.1:27017/Students")
 
 app.use("/api/auth", authRoutes);
 app.use("/api/protected", protectedRoutes);
 app.use("/api/messages", message);
 app.use("/api", courseRoutes);
+
+app.use(errorHandler);
+
+
 connectDb().then(() => {
   app.listen(3001, () => {
     console.log("Server is running");
