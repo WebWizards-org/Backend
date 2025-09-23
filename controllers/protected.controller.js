@@ -69,9 +69,13 @@ const getEnrolledCourses = async (req, res) => {
     const userId = req.user._id; // Get user ID from auth middleware (MongoDB uses _id)
     console.log("Fetching courses for user:", userId);
 
-    const student = await StudentModel.findById(userId).populate(
-      "purchasedCourses"
-    );
+    const student = await StudentModel.findById(userId).populate({
+      path: "purchasedCourses",
+      populate: {
+        path: "instructor",
+        select: "name email", // Only get instructor name and email
+      },
+    });
 
     if (!student) {
       return res.status(404).json({ message: "Student not found" });
@@ -144,7 +148,7 @@ const addPurchasedCourses = async (req, res) => {
     // Remove purchased courses from cart
     const originalCartLength = student.cart.length;
     student.cart = student.cart.filter(
-      (cartItemId) => !courseIds.includes(cartItemId.toString())
+      (cartItemId) => cartItemId && !courseIds.includes(cartItemId.toString())
     );
     console.log(
       "Cart before save - removed",
