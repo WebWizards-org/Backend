@@ -32,38 +32,22 @@ router.put(
   updateUserRole
 );
 
-router.post(
-  "/courses",
-  authMiddleware,
-  checkRole(ROLES.INSTRUCTOR),
-  createCourse
+router.post("/courses", authMiddleware, checkRole(ROLES.INSTRUCTOR), createCourse
 );
 router.get(
-  "/instructor/courses",
-  authMiddleware,
-  checkRole(ROLES.INSTRUCTOR),
-  getMyCourses
+  "/instructor/courses", authMiddleware, checkRole(ROLES.INSTRUCTOR), getMyCourses
 );
 
 router.post(
-  "/courses/:courseId/enroll",
-  authMiddleware,
-  checkRole(ROLES.STUDENT),
-  enrollInCourse
+  "/courses/:courseId/enroll", authMiddleware, checkRole(ROLES.STUDENT), enrollInCourse
 );
-router.get(
-  "/student/courses",
-  authMiddleware,
-  checkRole(ROLES.STUDENT),
-  getEnrolledCourses
+router.get("/student/courses", authMiddleware, checkRole(ROLES.STUDENT), getEnrolledCourses
 );
 router.get("/user/:id", getUserById);
 
-// Add purchased courses to student account
 router.post("/user/:id/purchase", authMiddleware, addPurchasedCourses);
 
-// Cart management routes
-router.get("/test-auth", authMiddleware, testAuth);
+// router.get("/test-auth", authMiddleware, testAuth);
 router.get("/cart", authMiddleware, checkRole(ROLES.STUDENT), getCart);
 router.post("/cart", authMiddleware, checkRole(ROLES.STUDENT), addToCart);
 router.delete(
